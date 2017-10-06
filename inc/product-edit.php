@@ -100,7 +100,7 @@ function render_price_metabox() {
  * Handle saving meta boxes.
  */
 function handle_post_save() {
-	if ( ! isset($_POST['woosimple-toggle'] )
+	if ( ! isset( $_POST['woosimple-toggle'] )
 		|| ! wp_verify_nonce( $_POST['woosimple-toggle'], 'woosimple-toggle' )
 	) {
 		return;

@@ -1,0 +1,24 @@
+{
+    "name": "liquidweb/woosimple",
+    "description": "Enhancements to simplify WooCommerce management",
+    "type": "wordpress-plugin",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Liquid Web",
+            "homepage": "https://www.liquidweb.com"
+        },
+        {
+            "name": "Steve Grunwell",
+            "homepage": "https://stevegrunwell.com"
+        }
+    ],
+    "require-dev": {
+        "stevegrunwell/wp-enforcer": "^0.5.0"
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "wp-enforcer"
+        ]
+    }
+}
