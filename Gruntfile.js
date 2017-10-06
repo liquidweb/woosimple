@@ -5,6 +5,59 @@ module.exports = function(grunt) {
 
 		pkg: grunt.file.readJSON('package.json'),
 
+		copy: {
+			main: {
+				src: [
+					'assets/*.css',
+					'assets/*.js',
+					'inc/**',
+					'languages/**',
+					'composer.json',
+					'CHANGELOG.md',
+					'LICENSE.txt',
+					'readme.txt',
+					'woosimple.php'
+				],
+				dest: 'dist/'
+			},
+		},
+
+		cssmin: {
+			options: {
+				sourceMap: true
+			},
+			target: {
+				files: {
+					'assets/admin.min.css': [
+						'assets/admin.css'
+					]
+				}
+			}
+		},
+
+		eslint: {
+			options: {
+				configFile: '.eslintrc'
+			},
+			target: [
+				'assets/js/product-edit.js'
+			]
+		},
+
+		uglify: {
+			options: {
+				banner: '/*! WooSimple - v<%= pkg.version %> */',
+				sourceMap: true
+			},
+			main: {
+				files: {
+					'assets/js/product-edit.min.js': [
+						'assets/js/product-edit.js'
+					]
+				}
+			}
+		},
+
 		makepot: {
 			target: {
 				options: {
@@ -28,23 +81,31 @@ module.exports = function(grunt) {
 		},
 
 		sass: {
+			options: {
+				outputStyle: 'compressed',
+				sourceMap: true
+			},
 			dist: {
 				files: [{
 					expand: true,
-					cwd: 'assets/scss',
+					cwd: 'assets/css/scss',
 					src: ['*.scss'],
-					dest: 'assets',
+					dest: 'assets/css',
 					ext: '.css'
 				}]
 			}
 		}
 	});
 
-	grunt.loadNpmTasks('grunt-sass');
-	grunt.loadNpmTasks('grunt-wp-i18n');
+	grunt.loadNpmTasks( 'grunt-contrib-copy' );
+	grunt.loadNpmTasks( 'grunt-sass' );
+	grunt.loadNpmTasks( 'grunt-contrib-uglify' );
+	grunt.loadNpmTasks( 'grunt-eslint' );
+	grunt.loadNpmTasks( 'grunt-wp-i18n' );
 
-	grunt.registerTask('i18n', ['makepot']);
-	grunt.registerTask('default', ['sass']);
+	grunt.registerTask( 'build', [ 'eslint', 'i18n', 'sass', 'uglify', 'copy' ] );
+	grunt.registerTask( 'i18n', [ 'makepot' ] );
+	grunt.registerTask( 'default', [ 'eslint', 'sass', 'uglify' ] );
 
 	grunt.util.linefeed = '\n';
 };

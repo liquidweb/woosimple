@@ -16,8 +16,11 @@
   ],
   "private": true,
   "devDependencies": {
-    "grunt": "~0.4.5",
+    "eslint-config-wordpress": "^2.0.0",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-uglify": "^3.0.1",
+    "grunt-eslint": "^20.0.0",
     "grunt-sass": "^2.0.0",
-    "grunt-wp-i18n": "~0.5.0"
+    "grunt-wp-i18n": "^1.0.0"
   }
 }

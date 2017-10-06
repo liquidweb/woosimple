@@ -18,9 +18,11 @@ function enqueue_scripts( $hook ) {
 		return;
 	}
 
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.min' : '';
+
 	wp_enqueue_style(
 		'woosimple-admin',
-		WOOSIMPLE_URL . '/assets/admin.css',
+		WOOSIMPLE_URL . "/assets/css/admin{$min}.css",
 		null,
 		WOOSIMPLE_VERSION,
 		'all'
@@ -28,7 +30,7 @@ function enqueue_scripts( $hook ) {
 
 	wp_enqueue_script(
 		'woosimple-product-edit',
-		WOOSIMPLE_URL . '/assets/product-edit.js',
+		WOOSIMPLE_URL . "/assets/js/product-edit{$min}.js",
 		[ 'postbox' ],
 		WOOSIMPLE_VERSION,
 		true

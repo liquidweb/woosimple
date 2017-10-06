@@ -1,9 +1,12 @@
 .DS_Store
+dist
 Thumbs.db
 wp-cli.local.yml
-assets/*.css
+assets/css/*.css
+assets/js/*.min.js
 node_modules
 vendor
+*.map
 *.sql
 *.tar.gz
 *.zip

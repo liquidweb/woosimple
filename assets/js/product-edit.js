@@ -9,14 +9,14 @@
 		'product_catdiv',
 		'tagsdiv-product_tag',
 		'woocommerce-product-data',
-		'woocommerce-product-images',
+		'woocommerce-product-images'
 	],
 	advancedElements = [
 		'catalog-visibility',
-		'visibility',
+		'visibility'
 	],
 	simpleElements = [
-		'woosimple-price',
+		'woosimple-price'
 	],
 	toggleButton = document.getElementById('woosimple-toggle-switch'),
 	defaultPrice = document.getElementById('_regular_price'),
@@ -33,9 +33,9 @@
 	function getMetaBox(id) {
 		if (! cache.hasOwnProperty(id)) {
 			cache[id] = {
-				toggle: document.getElementById(`${id}-hide`) || {},
-				metabox: document.getElementById(id) || document.createElement('div'),
-			}
+				toggle: document.getElementById(id + '-hide') || {},
+				metabox: document.getElementById(id) || document.createElement('div')
+			};
 		}
 
 		return cache[id];
