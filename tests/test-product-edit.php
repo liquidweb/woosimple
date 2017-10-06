@@ -70,4 +70,61 @@ class ProductEditTest extends WP_UnitTestCase {
 			'The price meta box should be available on the new product screen.'
 		);
 	}
+
+	public function test_saves_toggled_value() {
+		$user_id = $this->factory->user->create( [
+			'role' => 'contributor',
+		] );
+		wp_set_current_user( $user_id );
+
+		$_POST = [
+			'woosimple-toggle-switch' => 1,
+			'woosimple-toggle' => wp_create_nonce( 'woosimple-toggle' ),
+		];
+
+		handle_post_save();
+
+		$this->assertTrue(
+			(bool) get_user_meta( $user_id, 'woosimple_product', true ),
+			'The woosimple_product user meta should have been set.'
+		);
+	}
+
+	public function test_saves_toggled_value_when_empty() {
+		$user_id = $this->factory->user->create( [
+			'role' => 'contributor',
+		] );
+		wp_set_current_user( $user_id );
+		add_user_meta( $user_id, 'woosimple_product', 1 );
+
+		$_POST = [
+			'woosimple-toggle' => wp_create_nonce( 'woosimple-toggle' ),
+		];
+
+		handle_post_save();
+
+		$this->assertFalse(
+			(bool) get_user_meta( $user_id, 'woosimple_product', true ),
+			'Not having a value for $_POST["woosimple-toggle-switch"] means it\'s empty.'
+		);
+	}
+
+	public function test_verifies_nonce_when_saving_toggled_value() {
+		$user_id = $this->factory->user->create( [
+			'role' => 'contributor',
+		] );
+		wp_set_current_user( $user_id );
+
+		$_POST = [
+			'woosimple-toggle-switch' => 1,
+			'woosimple-toggle' => wp_create_nonce( 'INVALID-woosimple-toggle' ),
+		];
+
+		handle_post_save();
+
+		$this->assertFalse(
+			(bool) get_user_meta( $user_id, 'woosimple_product', true ),
+			'Nothing should change if nonce verification fails.'
+		);
+	}
 }
