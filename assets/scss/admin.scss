@@ -1,0 +1,54 @@
+/**
+ * Admin styles for WooSimple.
+ */
+
+$switch-height: 30px;
+$switch-width: 1.75 * $switch-height;
+
+// Modify the toggle meta box.
+#woosimple-toggle {
+	.handlediv {
+		display: none;
+	}
+}
+
+#woosimple-toggle-switch {
+	position: relative;
+	float: right;
+	display: inline-block;
+	width: $switch-width;
+
+	background: #f5f5f5;
+	border-color: #e5e5e5;
+
+	&, &:after {
+		box-sizing: border-box;
+		height: $switch-height;
+		border-radius: .5 * $switch-height;
+		transition: all .4s;
+	}
+
+	&:after {
+		content: '';
+		position: absolute;
+		left: 1px;
+		top: 1px;
+		display: block;
+		width: $switch-height - 4px;
+		height: $switch-height - 4px;
+		background: #f7f7f7;
+		border: 1px solid #ccc;
+	}
+
+	&:checked {
+		background: #0073aa;
+
+		&:before {
+			content: none; // Remove the default WordPress handling.
+		}
+
+		&:after {
+			left: ceil($switch-width - $switch-height);
+		}
+	}
+}

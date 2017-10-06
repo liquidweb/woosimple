@@ -12,20 +12,28 @@ use WP_UnitTestCase;
 class ProductEditTest extends WP_UnitTestCase {
 
 	const SCRIPT_HANDLE = 'woosimple-product-edit';
+	const STYLE_HANDLE = 'woosimple-admin';
 
 	/**
 	 * @dataProvider page_hook_provider()
 	 */
-	public function test_enqueues_script( $hook, $should_be_enqueued ) {
+	public function test_enqueues_assets( $hook, $should_be_enqueued ) {
+		wp_dequeue_style( self::STYLE_HANDLE );
 		wp_dequeue_script( self::SCRIPT_HANDLE );
 
+		$this->assertFalse( wp_script_is( self::STYLE_HANDLE, 'enqueued' ) );
 		$this->assertFalse( wp_script_is( self::SCRIPT_HANDLE, 'enqueued' ) );
 
 		do_action( 'admin_enqueue_scripts', $hook );
 
 		$this->assertEquals(
 			$should_be_enqueued,
-			wp_script_is( 'woosimple-product-edit', 'enqueued' )
+			wp_style_is( self::STYLE_HANDLE, 'enqueued' )
+		);
+
+		$this->assertEquals(
+			$should_be_enqueued,
+			wp_script_is( self::SCRIPT_HANDLE, 'enqueued' )
 		);
 	}
 

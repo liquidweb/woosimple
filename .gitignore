@@ -1,7 +1,8 @@
 .DS_Store
 Thumbs.db
 wp-cli.local.yml
-node_modules/
+assets/*.css
+node_modules
 vendor
 *.sql
 *.tar.gz

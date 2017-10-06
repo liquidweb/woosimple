@@ -18,6 +18,14 @@ function enqueue_scripts( $hook ) {
 		return;
 	}
 
+	wp_enqueue_style(
+		'woosimple-admin',
+		WOOSIMPLE_URL . '/assets/admin.css',
+		null,
+		WOOSIMPLE_VERSION,
+		'all'
+	);
+
 	wp_enqueue_script(
 		'woosimple-product-edit',
 		WOOSIMPLE_URL . '/assets/product-edit.js',
