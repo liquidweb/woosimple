@@ -12,6 +12,7 @@ $switch-width: 1.75 * $switch-height;
 	}
 
 	label {
+		display: block;
 		font-weight: bold;
 	}
 }
