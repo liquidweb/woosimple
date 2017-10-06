@@ -72,7 +72,7 @@ function render_toggle_metabox() {
 	<p>
 		<label>
 			<input name="woosimple-toggle-switch" id="woosimple-toggle-switch" type="checkbox" <?php checked( true, $active ); ?>>
-			<?php esc_html_e( 'Enable Easy Mode', 'woosimple' ); ?>
+			<?php esc_html_e( 'Simplify this Page', 'woosimple' ); ?>
 		</label>
 	</p>
 

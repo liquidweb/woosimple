@@ -7,8 +7,12 @@ $switch-width: 1.75 * $switch-height;
 
 // Modify the toggle meta box.
 #woosimple-toggle {
-	.handlediv {
+	.handlediv, h2 {
 		display: none;
+	}
+
+	label {
+		font-weight: bold;
 	}
 }
 
