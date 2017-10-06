@@ -17,7 +17,8 @@ $switch-width: 1.75 * $switch-height;
 	}
 }
 
-#woosimple-toggle-switch {
+// Toggle switch styling for checkboxes.
+input.woosimple-toggle-switch {
 	position: relative;
 	float: right;
 	display: inline-block;
