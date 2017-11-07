@@ -18,13 +18,14 @@ function enqueue_scripts( $hook ) {
 		return;
 	}
 
-	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '.min' : '';
+	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+	$ver = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WOOSIMPLE_VERSION;
 
 	wp_enqueue_style(
 		'woosimple-admin',
-		WOOSIMPLE_URL . "/assets/css/admin{$min}.css",
+		WOOSIMPLE_URL . "/assets/css/admin.css",
 		null,
-		WOOSIMPLE_VERSION,
+		$ver,
 		'all'
 	);
 
@@ -32,9 +33,11 @@ function enqueue_scripts( $hook ) {
 		'woosimple-product-edit',
 		WOOSIMPLE_URL . "/assets/js/product-edit{$min}.js",
 		[ 'postbox' ],
-		WOOSIMPLE_VERSION,
+		$ver,
 		true
 	);
+
+	wp_localize_script( 'woosimple-product-edit', 'wooSimple', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 }
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
 
@@ -42,14 +45,6 @@ add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
  * Register the WooSimple meta box.
  */
 function register_metaboxes() {
-	add_meta_box(
-		'woosimple-toggle',
-		_x( 'WooSimple', 'Product edit meta box name', 'woosimple' ),
-		__NAMESPACE__ . '\render_toggle_metabox',
-		'product',
-		'side',
-		'high'
-	);
 
 	add_meta_box(
 		'woosimple-price',
@@ -62,24 +57,95 @@ function register_metaboxes() {
 }
 add_action( 'add_meta_boxes', __NAMESPACE__ . '\register_metaboxes' );
 
+
 /**
- * Render the WooSimple meta box.
+ * Check for our URL with the nonce and woosimple string.
+ *
+ * @return void
  */
-function render_toggle_metabox() {
-	$active = (bool) get_user_meta( wp_get_current_user()->ID, 'woosimple_product', true );
+function check_manual_setting() {
 
-	wp_nonce_field( 'woosimple-toggle', 'woosimple-toggle' );
-?>
+	// Make sure our values were passed correctly.
+	if ( empty( $_GET['woosimple'] ) || empty( $_GET['_wsnonce'] ) || empty( $_GET['post'] ) ) {
+		return;
+	}
 
-	<p>
-		<label>
-			<input name="woosimple-toggle-switch" id="woosimple-toggle-switch" class="woosimple-toggle-switch" type="checkbox" <?php checked( true, $active ); ?>>
-			<?php esc_html_e( 'Simplify this Page', 'woosimple' ); ?>
-		</label>
-	</p>
+	// Handle our nonce check.
+	if ( ! wp_verify_nonce( $_GET['_wsnonce'], 'woosimple-link' ) ) {
+		return;
+	}
 
-<?php
+	// Make sure it's one of the two we want.
+	if ( ! in_array( esc_attr( $_GET['woosimple'] ), array( 'on', 'off' ) ) ) {
+		return;
+	}
+
+	// Now set the setting.
+	set_user_setting( 'woosimple', esc_attr( $_GET['woosimple'] ) );
+
+	// Recreate the edit URL and redirect.
+	wp_redirect( get_edit_post_link( absint( $_GET['post'] ), 'raw' ) );
+	exit();
 }
+add_action( 'admin_head', __NAMESPACE__ . '\check_manual_setting' );
+
+/**
+ * Render the WooSimple screen options box.
+ *
+ * @param  string $settings  Our existing settings string.
+ * @param  object $instance  The screen instance object.
+ *
+ * @return string            The updated settings string.
+ */
+function set_screen_setting( $settings, $instance ) {
+
+	// Bail if we aren't on a single product edit page.
+	if ( ! is_object( $instance ) || empty( $instance->base ) || 'post' !== $instance->base || empty( $instance->post_type ) || 'product' !== $instance->post_type ) {
+		return $settings;
+	}
+
+	// Check for whether we've turned this on or not.
+	$check  = get_user_setting( 'woosimple', 'off' );
+
+	// Set the toggle (opposite) value for the URL.
+	$toggle = 'on' === esc_attr( $check ) ? 'off' : 'on';
+
+	// Set my args for the link.
+	$args   = array(
+		'woosimple' => $toggle,
+		'_wsnonce'  => wp_create_nonce( 'woosimple-link' ),
+	);
+
+	// Construct the link and text.
+	$link   = add_query_arg( $args, get_edit_post_link( get_the_ID(), 'raw' ) );
+
+	// Set our empty.
+	$build  = '';
+
+	// Build our button link for the non-JS fallback.
+	$build .= '<fieldset class="editor-woosimple editor-woosimple-manual hide-if-js">';
+		$build .= '<p class="woosimple-toggle-row">';
+			$build .= '<a href="' . esc_url( $link ) . '" class="button button-small button-secondary woosimple-button">' . __( 'Click', 'woosimple' ) . '</a>';
+			$build .= __( 'Toggle the display of extra settings from the WooCommerce product details.', 'woosimple' );
+		$build .= '</p>';
+	$build .= '</fieldset>';
+
+	// Build our checkbox for the JS version.
+	$build .= '<fieldset class="editor-woosimple editor-woosimple-ajax hide-if-no-js">';
+		$build .= '<label for="editor-woosimple-toggle">';
+		$build .= '<input type="checkbox" name="editor-woosimple-toggle" id="editor-woosimple-toggle"' . checked( 'on', $check, false ) . ' />';
+		$build .= __( 'Remove extra settings from the WooCommerce product details', 'woosimple' ) . '</label>';
+		$build .= wp_nonce_field( 'woosimple-toggle-nonce', 'woosimple-toggle-nonce', true, false );
+	$build .= '</fieldset>';
+
+	// Now add this build to our existing setting string.
+	$settings .= $build;
+
+	// And return the settings string.
+	return $settings;
+}
+add_filter( 'screen_settings', __NAMESPACE__ . '\set_screen_setting', 10, 2 );
+
 
 /**
  * Render the simplified price meta box.
@@ -99,21 +165,54 @@ function render_price_metabox() {
 }
 
 /**
- * Handle saving meta boxes.
+ * Handle the Ajax call for setting the WooSimple state.
+ *
+ * @return array
  */
-function handle_post_save() {
-	if ( ! isset( $_POST['woosimple-toggle'] )
-		|| ! wp_verify_nonce( $_POST['woosimple-toggle'], 'woosimple-toggle' )
-	) {
+function save_user_setting() {
+
+	// Only run this on the admin side.
+	if ( ! is_admin() ) {
+		die();
+	}
+
+	// Bail if we are doing a REST API request.
+	if ( defined( 'REST_REQUEST' ) && REST_REQUEST ) {
 		return;
 	}
 
-	// Store whether or not the user was in "Easy Mode".
-	update_user_meta(
-		wp_get_current_user()->ID,
-		'woosimple_product',
-		empty( $_POST['woosimple-toggle-switch'] ) ? 0 : 1
-	);
+	// Bail out if running an autosave.
+	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
+		return;
+	}
 
+	// Bail out if running a cron, unless we've skipped that.
+	if ( defined( 'DOING_CRON' ) && DOING_CRON ) {
+		return;
+	}
+
+	// Make sure we can even edit posts.
+	if ( ! current_user_can( 'edit_post' ) ) {
+		return;
+	}
+
+	// Do our nonce check.
+	if ( empty( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_GET['nonce'] ), 'woosimple-toggle-nonce' ) ) {
+		return;
+	}
+
+	// Make sure the action is correct.
+	if ( empty( $_GET['action'] ) || 'woosimple_save_setting' !== sanitize_text_field( $_GET['action'] ) ) {
+		return;
+	}
+
+	// Make sure we have one of the two actions.
+	if ( empty( $_GET['woosimple'] ) || ! in_array( sanitize_text_field( $_GET['woosimple'] ), array( 'on', 'off' ) ) ) {
+		return;
+	}
+
+	// Now set the setting.
+	set_user_setting( 'woosimple', esc_attr( $_GET['woosimple'] ) );
 }
-add_action( 'save_post_product', __NAMESPACE__ . '\handle_post_save' );
+
+add_action( 'wp_ajax_woosimple_save_setting', __NAMESPACE__ . '\save_user_setting' );

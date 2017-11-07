@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: WooSimple 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woosimple\n"
-"POT-Creation-Date: 2017-11-07 15:52:57+00:00\n"
+"POT-Creation-Date: 2017-11-07 17:59:12+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -24,12 +24,20 @@ msgstr ""
 "X-Textdomain-Support: yes\n"
 "X-Generator: grunt-wp-i18n1.0.0\n"
 
-#: inc/product-edit.php:77
+#: dist/inc/product-edit.php:77 inc/product-edit.php:136
 msgid "Simplify this Page"
 msgstr ""
 
-#: inc/product-edit.php:93
+#: dist/inc/product-edit.php:93 inc/product-edit.php:152
 msgid "Regular price"
+msgstr ""
+
+#: inc/product-edit.php:101
+msgid "Toggle"
+msgstr ""
+
+#: inc/product-edit.php:102
+msgid "Remove extra settings from the WooCommerce product details"
 msgstr ""
 
 #. Plugin Name of the plugin/theme
@@ -48,12 +56,12 @@ msgstr ""
 msgid "https://www.liquidweb.com"
 msgstr ""
 
-#: inc/product-edit.php:47
+#: dist/inc/product-edit.php:47
 msgctxt "Product edit meta box name"
 msgid "WooSimple"
 msgstr ""
 
-#: inc/product-edit.php:56
+#: dist/inc/product-edit.php:56 inc/product-edit.php:58
 msgctxt "Product edit meta box name"
 msgid "Pricing"
 msgstr ""

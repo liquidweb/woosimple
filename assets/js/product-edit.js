@@ -18,9 +18,10 @@
 	simpleElements = [
 		'woosimple-price'
 	],
-	toggleButton = document.getElementById('woosimple-toggle-switch'),
+	toggleButton = document.getElementById('editor-woosimple-toggle'),
 	defaultPrice = document.getElementById('_regular_price'),
 	customPrice = document.getElementById('woosimple_regular_price'),
+	toggleNonce = document.getElementById('woosimple-toggle-nonce'),
 	cache = {};
 
 	/**
@@ -99,14 +100,36 @@
 	customPrice.addEventListener('change', syncPrices);
 
 	/**
+	 * Set the values of the WooSimple toggle as it changes.
+	 *
+	 * @param checkVal - The checked value.
+	 */
+	function saveSetting(checkVal) {
+
+		// Build my Ajax URL.
+		var sendURL = wooSimple.ajax_url + '?action=woosimple_save_setting&nonce=' + toggleNonce.value + '&woosimple=' + checkVal;
+
+		// Set my new request.
+		var xmlhttp = new XMLHttpRequest();
+
+		// Set up our POST request.
+		xmlhttp.open( 'POST', sendURL, true );
+
+		// Send the actual request.
+		xmlhttp.send();
+	}
+
+	/**
 	 * Master toggle function.
 	 */
 	function toggleMode() {
 		if (toggleButton.checked) {
+			saveSetting('on');
 			advancedMetaBoxes.map(hideMetabox);
 			advancedElements.map(hideElement);
 			simpleElements.map(showElement);
 		} else {
+			saveSetting('off');
 			advancedMetaBoxes.map(showMetabox);
 			advancedElements.map(showElement);
 			simpleElements.map(hideElement);
