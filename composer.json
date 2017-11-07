@@ -11,6 +11,10 @@
         {
             "name": "Steve Grunwell",
             "homepage": "https://stevegrunwell.com"
+        },
+        {
+            "name": "Andrew Norcross",
+            "homepage": "http://andrewnorcross.com"
         }
     ],
     "require-dev": {
