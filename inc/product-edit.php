@@ -14,29 +14,34 @@ namespace WooSimple\ProductEdit;
  * @param string $hook The name of the current admin page.
  */
 function enqueue_scripts( $hook ) {
-	if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ], true ) ) {
+
+	// Bail if not on admin or our function doesnt exist.
+	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
 		return;
 	}
 
+	// Get my current screen.
+	$screen = get_current_screen();
+
+	// Bail without.
+	if ( empty( $screen ) || ! is_object( $screen ) ) {
+		return;
+	}
+
+	// Make sure we are on the single product editor.
+	if ( 'post' !== $screen->base || 'product' !== $screen->post_type ) {
+		return;
+	}
+
+	// Set our minified check and version number.
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	$ver = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WOOSIMPLE_VERSION;
 
-	wp_enqueue_style(
-		'woosimple-admin',
-		WOOSIMPLE_URL . "/assets/css/admin.css",
-		null,
-		$ver,
-		'all'
-	);
+	// Load our CSS, which is always minified.
+	wp_enqueue_style( 'woosimple-admin', WOOSIMPLE_URL . '/assets/css/admin.css', null, $ver, 'all' );
 
-	wp_enqueue_script(
-		'woosimple-product-edit',
-		WOOSIMPLE_URL . "/assets/js/product-edit{$min}.js",
-		[ 'postbox' ],
-		$ver,
-		true
-	);
-
+	// Load our JS file, which is minified on production with the localized Ajax URL.
+	wp_enqueue_script( 'woosimple-product-edit', WOOSIMPLE_URL . "/assets/js/product-edit{$min}.js", [ 'postbox' ], $ver, true );
 	wp_localize_script( 'woosimple-product-edit', 'wooSimple', array( 'ajax_url' => admin_url( 'admin-ajax.php' ) ) );
 }
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
