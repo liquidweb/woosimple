@@ -132,9 +132,9 @@ function set_screen_setting( $settings, $instance ) {
 
 	// Build our checkbox for the JS version.
 	$build .= '<fieldset class="editor-woosimple editor-woosimple-ajax hide-if-no-js">';
-		$build .= '<label for="editor-woosimple-toggle">';
-		$build .= '<input type="checkbox" name="editor-woosimple-toggle" id="editor-woosimple-toggle"' . checked( 'on', $check, false ) . ' />';
-		$build .= __( 'Remove extra settings from the WooCommerce product details', 'woosimple' ) . '</label>';
+		$build .= '<label for="woosimple-screen-toggle">';
+		$build .= '<input type="checkbox" name="woosimple-screen-toggle" id="woosimple-screen-toggle"' . checked( 'on', $check, false ) . ' />';
+		$build .= __( 'Display the simplified product editor.', 'woosimple' ) . '</label>';
 		$build .= wp_nonce_field( 'woosimple-toggle-nonce', 'woosimple-toggle-nonce', true, false );
 	$build .= '</fieldset>';
 

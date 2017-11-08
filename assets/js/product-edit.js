@@ -18,7 +18,7 @@
 	simpleElements = [
 		'woosimple-price'
 	],
-	toggleButton = document.getElementById('editor-woosimple-toggle'),
+	toggleButton = document.getElementById('woosimple-screen-toggle'),
 	defaultPrice = document.getElementById('_regular_price'),
 	customPrice = document.getElementById('woosimple_regular_price'),
 	toggleNonce = document.getElementById('woosimple-toggle-nonce'),
