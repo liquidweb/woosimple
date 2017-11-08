@@ -126,7 +126,7 @@ function set_screen_setting( $settings, $instance ) {
 	$build .= '<fieldset class="editor-woosimple editor-woosimple-manual hide-if-js">';
 		$build .= '<p class="woosimple-toggle-row">';
 			$build .= '<a href="' . esc_url( $link ) . '" class="button button-small button-secondary woosimple-button">' . __( 'Click', 'woosimple' ) . '</a>';
-			$build .= __( 'Toggle the display of extra settings from the WooCommerce product details.', 'woosimple' );
+			$build .= esc_html__( 'Toggle the display of extra settings from the WooCommerce product details.', 'woosimple' );
 		$build .= '</p>';
 	$build .= '</fieldset>';
 
@@ -134,7 +134,7 @@ function set_screen_setting( $settings, $instance ) {
 	$build .= '<fieldset class="editor-woosimple editor-woosimple-ajax hide-if-no-js">';
 		$build .= '<label for="woosimple-screen-toggle">';
 		$build .= '<input type="checkbox" name="woosimple-screen-toggle" id="woosimple-screen-toggle"' . checked( 'on', $check, false ) . ' />';
-		$build .= __( 'Display the simplified product editor.', 'woosimple' ) . '</label>';
+		$build .= esc_html__( 'Display the simplified product editor.', 'woosimple' ) . '</label>';
 		$build .= wp_nonce_field( 'woosimple-toggle-nonce', 'woosimple-toggle-nonce', true, false );
 	$build .= '</fieldset>';
 
