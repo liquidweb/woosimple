@@ -20,7 +20,7 @@ $switch-width: 1.75 * $switch-height;
 // Paragraph wrap for the screen option.
 p.woosimple-toggle-row {
 	margin: 0;
-	line-height: 30px;
+	line-height: $switch-height;
 
 	a.woosimple-button {
 		margin-right: 7px;
