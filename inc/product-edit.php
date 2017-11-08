@@ -76,17 +76,17 @@ function check_manual_setting() {
 	}
 
 	// Handle our nonce check.
-	if ( ! wp_verify_nonce( $_GET['_wsnonce'], 'woosimple-link' ) ) {
+	if ( ! wp_verify_nonce( $_GET['_wsnonce'], 'woosimple-link' ) ) { // WPCS: sanitization ok.
 		return;
 	}
 
 	// Make sure it's one of the two we want.
-	if ( ! in_array( esc_attr( $_GET['woosimple'] ), array( 'on', 'off' ) ) ) {
+	if ( ! in_array( sanitize_text_field( wp_unslash( $_GET['woosimple'] ) ), array( 'on', 'off' ) ) ) {
 		return;
 	}
 
 	// Now set the setting.
-	set_user_setting( 'woosimple', esc_attr( $_GET['woosimple'] ) );
+	set_user_setting( 'woosimple', sanitize_text_field( wp_unslash( $_GET['woosimple'] ) ) );
 
 	// Recreate the edit URL and redirect.
 	wp_redirect( get_edit_post_link( absint( $_GET['post'] ), 'raw' ) );
@@ -113,7 +113,7 @@ function set_screen_setting( $settings, $instance ) {
 	$check  = get_user_setting( 'woosimple', 'off' );
 
 	// Set the toggle (opposite) value for the URL.
-	$toggle = 'on' === esc_attr( $check ) ? 'off' : 'on';
+	$toggle = esc_attr( $check ) === 'on' ? 'off' : 'on';
 
 	// Set my args for the link.
 	$args   = array(
@@ -201,23 +201,28 @@ function save_user_setting() {
 		return;
 	}
 
+	// Make sure our values were passed correctly.
+	if ( empty( $_GET['nonce'] ) || empty( $_GET['action'] ) || empty( $_GET['woosimple'] ) ) {
+		return;
+	}
+
 	// Do our nonce check.
-	if ( empty( $_GET['nonce'] ) || ! wp_verify_nonce( sanitize_text_field( $_GET['nonce'] ), 'woosimple-toggle-nonce' ) ) {
+	if ( ! wp_verify_nonce( $_GET['nonce'], 'woosimple-toggle-nonce' ) ) { // WPCS: sanitization ok.
 		return;
 	}
 
 	// Make sure the action is correct.
-	if ( empty( $_GET['action'] ) || 'woosimple_save_setting' !== sanitize_text_field( $_GET['action'] ) ) {
+	if ( 'woosimple_save_setting' !== sanitize_text_field( wp_unslash( $_GET['action'] ) ) ) {
 		return;
 	}
 
 	// Make sure we have one of the two actions.
-	if ( empty( $_GET['woosimple'] ) || ! in_array( sanitize_text_field( $_GET['woosimple'] ), array( 'on', 'off' ) ) ) {
+	if ( ! in_array( sanitize_text_field( wp_unslash( $_GET['woosimple'] ) ), array( 'on', 'off' ) ) ) {
 		return;
 	}
 
 	// Now set the setting.
-	set_user_setting( 'woosimple', esc_attr( $_GET['woosimple'] ) );
+	set_user_setting( 'woosimple', sanitize_text_field( wp_unslash( $_GET['woosimple'] ) ) );
 }
 
 add_action( 'wp_ajax_woosimple_save_setting', __NAMESPACE__ . '\save_user_setting' );
