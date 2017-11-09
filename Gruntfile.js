@@ -8,8 +8,8 @@ module.exports = function(grunt) {
 		copy: {
 			main: {
 				src: [
-					'assets/*.css',
-					'assets/*.js',
+					'assets/**',
+					'!assets/css/scss/**',
 					'inc/**',
 					'languages/**',
 					'composer.json',
@@ -18,21 +18,9 @@ module.exports = function(grunt) {
 					'readme.txt',
 					'woosimple.php'
 				],
-				dest: 'dist/'
+				dest: 'dist/',
+				expand: true
 			},
-		},
-
-		cssmin: {
-			options: {
-				sourceMap: true
-			},
-			target: {
-				files: {
-					'assets/admin.min.css': [
-						'assets/admin.css'
-					]
-				}
-			}
 		},
 
 		eslint: {
