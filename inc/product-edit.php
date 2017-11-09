@@ -75,7 +75,7 @@ add_action( 'add_meta_boxes', __NAMESPACE__ . '\register_metaboxes' );
 function render_toggle_metabox() {
 
 	// Fetch our user setting.
-	$active = get_user_setting( 'woosimple', 'off' );
+	$active = (bool) get_user_meta( wp_get_current_user()->ID, 'woosimple_product', true );
 
 	// Output our nonce field.
 	wp_nonce_field( 'woosimple-toggle-nonce', 'woosimple-toggle-nonce' );
@@ -119,6 +119,6 @@ function handle_post_save() {
 	}
 
 	// Store whether or not the user was in "Easy Mode".
-	set_user_setting( 'woosimple', empty( $_POST['woosimple-toggle-switch'] ) ? 'off' : 'on' );
+	update_user_meta( wp_get_current_user()->ID, 'woosimple_product', empty( $_POST['woosimple-toggle-switch'] ) ? 0 : 1 );
 }
 add_action( 'save_post_product', __NAMESPACE__ . '\handle_post_save' );
