@@ -73,14 +73,17 @@ add_action( 'add_meta_boxes', __NAMESPACE__ . '\register_metaboxes' );
  * Render the WooSimple meta box.
  */
 function render_toggle_metabox() {
-	$active = (bool) get_user_meta( wp_get_current_user()->ID, 'woosimple_product', true );
 
-	wp_nonce_field( 'woosimple-toggle', 'woosimple-toggle' );
+	// Fetch our user setting.
+	$active = get_user_setting( 'woosimple', 'off' );
+
+	// Output our nonce field.
+	wp_nonce_field( 'woosimple-toggle-nonce', 'woosimple-toggle-nonce' );
 ?>
 
 	<p>
 		<label>
-			<input name="woosimple-toggle-switch" id="woosimple-toggle-switch" class="woosimple-toggle-switch" type="checkbox" <?php checked( true, $active ); ?>>
+			<input name="woosimple-toggle-switch" value="on" id="woosimple-toggle-switch" class="woosimple-toggle-switch" type="checkbox" <?php checked( 'on', $active ); ?>>
 			<?php esc_html_e( 'Simplify this Page', 'woosimple' ); ?>
 		</label>
 	</p>
@@ -95,11 +98,11 @@ function render_price_metabox() {
 	$product = wc_get_product( get_the_ID() );
 ?>
 
-	<p>
+	<p class="woosimple-render-price-field">
 		<label for="_regular_price">
 			<?php echo esc_html( __( 'Regular price', 'woocommerce' ) . ' (' . get_woocommerce_currency_symbol() . ')' ); ?>
 		</label>
-		<input id="woosimple_regular_price" type="text" value="<?php echo esc_attr( $product->get_regular_price( 'edit' ) ); ?>">
+		<input id="woosimple_regular_price" type="text" class="woosimple-render-price" value="<?php echo esc_attr( $product->get_regular_price( 'edit' ) ); ?>">
 	</p>
 
 <?php
@@ -109,18 +112,13 @@ function render_price_metabox() {
  * Handle saving meta boxes.
  */
 function handle_post_save() {
-	if ( ! isset( $_POST['woosimple-toggle'] )
-		|| ! wp_verify_nonce( $_POST['woosimple-toggle'], 'woosimple-toggle' )
-	) {
+
+	// Run our nonce check.
+	if ( ! isset( $_POST['woosimple-toggle-nonce'] ) || ! wp_verify_nonce( $_POST['woosimple-toggle-nonce'], 'woosimple-toggle-nonce' ) ) { // WPCS: sanitization ok.
 		return;
 	}
 
 	// Store whether or not the user was in "Easy Mode".
-	update_user_meta(
-		wp_get_current_user()->ID,
-		'woosimple_product',
-		empty( $_POST['woosimple-toggle-switch'] ) ? 0 : 1
-	);
-
+	set_user_setting( 'woosimple', empty( $_POST['woosimple-toggle-switch'] ) ? 'off' : 'on' );
 }
 add_action( 'save_post_product', __NAMESPACE__ . '\handle_post_save' );

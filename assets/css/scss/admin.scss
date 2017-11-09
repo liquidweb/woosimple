@@ -58,3 +58,19 @@ input.woosimple-toggle-switch {
 		}
 	}
 }
+
+p.woosimple-render-price-field {
+
+	label {
+		margin-right: 1em;
+	}
+
+	input.woosimple-render-price {
+		width: 6em;
+		display: inline-block;
+		vertical-align: middle;
+	}
+
+}
+
+
