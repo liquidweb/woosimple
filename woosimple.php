@@ -4,8 +4,10 @@
  * Description: Enhancements to simplify WooCommerce management.
  * Author:      Liquid Web
  * Author URI:  https://www.liquidweb.com
- * Text Domain: woosimple
  * Version:     0.1.0
+ * Text Domain: woosimple
+ * WC requires at least: 3.0.0
+ * WC tested up to: 3.2.3
  *
  * @package WooSimple
  * @author  Liquid Web
