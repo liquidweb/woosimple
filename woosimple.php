@@ -7,7 +7,9 @@
  * Version:               0.1.0
  * Text Domain:           woosimple
  * WC requires at least:  3.0.0
- * WC tested up to:       3.2.0
+ * WC tested up to:       3.2.5
+ * Requires at least:     4.7
+ * Tested up to:          4.9.1
  *
  * @package WooSimple
  * @author  Liquid Web
