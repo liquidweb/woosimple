@@ -17,11 +17,11 @@
   "private": true,
   "devDependencies": {
     "eslint-config-wordpress": "^2.0.0",
-    "grunt": "^1.0.1",
+    "grunt": "^1.0.3",
     "grunt-contrib-copy": "^1.0.0",
-    "grunt-contrib-uglify": "^3.0.1",
-    "grunt-eslint": "^20.0.0",
-    "grunt-sass": "^2.0.0",
-    "grunt-wp-i18n": "^1.0.0"
+    "grunt-contrib-uglify": "^3.3.0",
+    "grunt-eslint": "^21.0.0",
+    "grunt-sass": "^3.0.0",
+    "grunt-wp-i18n": "^1.0.2"
   }
 }
