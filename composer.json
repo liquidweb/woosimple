@@ -1,28 +1,37 @@
 {
-    "name": "liquidweb/woosimple",
-    "description": "Enhancements to simplify WooCommerce management",
-    "type": "wordpress-plugin",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Liquid Web",
-            "homepage": "https://www.liquidweb.com"
-        },
-        {
-            "name": "Steve Grunwell",
-            "homepage": "https://stevegrunwell.com"
-        },
-        {
-            "name": "Andrew Norcross",
-            "homepage": "http://andrewnorcross.com"
-        }
-    ],
-    "require-dev": {
-        "stevegrunwell/wp-enforcer": "^0.5.0"
+  "name": "liquidweb/woosimple",
+  "description": "Enhancements to simplify WooCommerce management",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Liquid Web",
+      "homepage": "https://www.liquidweb.com"
     },
-    "scripts": {
-        "post-install-cmd": [
-            "wp-enforcer"
-        ]
+    {
+      "name": "Steve Grunwell",
+      "homepage": "https://stevegrunwell.com"
+    },
+    {
+      "name": "Andrew Norcross",
+      "homepage": "http://andrewnorcross.com"
     }
+  ],
+  "require-dev": {
+    "stevegrunwell/wp-enforcer": "^0.5.0",
+    "phpunit/phpunit": "^6.5"
+  },
+  "scripts": {
+    "post-install-cmd": [
+      "wp-enforcer"
+    ]
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "7.0"
+    }
+  }
 }
