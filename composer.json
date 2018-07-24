@@ -1,28 +1,34 @@
 {
-    "name": "liquidweb/woosimple",
-    "description": "Enhancements to simplify WooCommerce management",
-    "type": "wordpress-plugin",
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Liquid Web",
-            "homepage": "https://www.liquidweb.com"
-        },
-        {
-            "name": "Steve Grunwell",
-            "homepage": "https://stevegrunwell.com"
-        },
-        {
-            "name": "Andrew Norcross",
-            "homepage": "http://andrewnorcross.com"
-        }
-    ],
-    "require-dev": {
-        "stevegrunwell/wp-enforcer": "^0.5.0"
+  "name": "liquidweb/woosimple",
+  "description": "Enhancements to simplify WooCommerce management",
+  "type": "wordpress-plugin",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Liquid Web",
+      "homepage": "https://www.liquidweb.com"
     },
-    "scripts": {
-        "post-install-cmd": [
-            "wp-enforcer"
-        ]
+    {
+      "name": "Steve Grunwell",
+      "homepage": "https://stevegrunwell.com"
+    },
+    {
+      "name": "Andrew Norcross",
+      "homepage": "http://andrewnorcross.com"
     }
+  ],
+  "require-dev": {
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.4.4",
+    "phpunit/phpunit": "^6.5",
+    "wimg/php-compatibility": "^8.2",
+    "wp-coding-standards/wpcs": "^0.14.1"
+  },
+  "config": {
+    "preferred-install": "dist",
+    "sort-packages": true,
+    "optimize-autoloader": true,
+    "platform": {
+      "php": "7.0"
+    }
+  }
 }
