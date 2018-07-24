@@ -81,7 +81,7 @@ function render_toggle_metabox() {
 
 	<p>
 		<label>
-			<input name="woosimple-toggle-switch" value="on" id="woosimple-toggle-switch" class="woosimple-toggle-switch" type="checkbox" <?php checked( 'on', $active ); ?>>
+			<input name="woosimple-toggle-switch" id="woosimple-toggle-switch" class="woosimple-toggle-switch" type="checkbox" <?php checked( true, $active ); ?>>
 			<?php esc_html_e( 'Simplify this Page', 'woosimple' ); ?>
 		</label>
 	</p>
