@@ -79,7 +79,7 @@ class ProductEditTest extends WP_UnitTestCase {
 
 		$_POST = [
 			'woosimple-toggle-switch' => 1,
-			'woosimple-toggle' => wp_create_nonce( 'woosimple-toggle' ),
+			'woosimple-toggle-nonce'  => wp_create_nonce( 'woosimple-toggle-nonce' ),
 		];
 
 		handle_post_save();
@@ -98,7 +98,7 @@ class ProductEditTest extends WP_UnitTestCase {
 		add_user_meta( $user_id, 'woosimple_product', 1 );
 
 		$_POST = [
-			'woosimple-toggle' => wp_create_nonce( 'woosimple-toggle' ),
+			'woosimple-toggle-nonce' => wp_create_nonce( 'woosimple-toggle-nonce' ),
 		];
 
 		handle_post_save();
@@ -117,7 +117,7 @@ class ProductEditTest extends WP_UnitTestCase {
 
 		$_POST = [
 			'woosimple-toggle-switch' => 1,
-			'woosimple-toggle' => wp_create_nonce( 'INVALID-woosimple-toggle' ),
+			'woosimple-toggle-nonce'  => wp_create_nonce( 'INVALID-woosimple-toggle' ),
 		];
 
 		handle_post_save();
