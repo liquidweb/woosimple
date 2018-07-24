@@ -25,11 +25,6 @@
     "wimg/php-compatibility": "^8.2",
     "wp-coding-standards/wpcs": "^0.14.1"
   },
-  "scripts": {
-    "post-install-cmd": [
-      "wp-enforcer"
-    ]
-  },
   "config": {
     "preferred-install": "dist",
     "sort-packages": true,

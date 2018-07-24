@@ -1,4 +1,7 @@
 # WooSimple
+
+[![Build Status](https://travis-ci.org/liquidweb/woosimple.svg?branch=develop)](https://travis-ci.org/liquidweb/woosimple)
+
 A simplified WooCommerce product page, enabled by a simple setting on that page.
 
 ## Description
