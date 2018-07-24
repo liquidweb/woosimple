@@ -108,13 +108,17 @@ function render_price_metabox() {
  * Handle saving meta boxes.
  */
 function handle_post_save() {
-
-	// Run our nonce check.
-	if ( ! isset( $_POST['woosimple-toggle-nonce'] ) || ! wp_verify_nonce( $_POST['woosimple-toggle-nonce'], 'woosimple-toggle-nonce' ) ) { // WPCS: sanitization ok.
+	if ( ! isset( $_POST['woosimple-toggle-nonce'] )
+		|| ! wp_verify_nonce( $_POST['woosimple-toggle-nonce'], 'woosimple-toggle-nonce' )
+	) { // WPCS: sanitization ok.
 		return;
 	}
 
 	// Store whether or not the user was in "Easy Mode".
-	update_user_meta( wp_get_current_user()->ID, 'woosimple_product', empty( $_POST['woosimple-toggle-switch'] ) ? 0 : 1 );
+	update_user_meta(
+		wp_get_current_user()->ID,
+		'woosimple_product',
+		empty( $_POST['woosimple-toggle-switch'] ) ? 0 : 1
+	);
 }
 add_action( 'save_post_product', __NAMESPACE__ . '\handle_post_save' );
