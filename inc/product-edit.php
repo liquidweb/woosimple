@@ -75,6 +75,8 @@ function render_toggle_metabox() {
 
 	// Output our nonce field.
 	wp_nonce_field( 'woosimple-toggle-nonce', 'woosimple-toggle-nonce' );
+
+// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 ?>
 
 	<p>
@@ -84,7 +86,7 @@ function render_toggle_metabox() {
 		</label>
 	</p>
 
-<?php
+<?php // phpcs:enable Generic.WhiteSpace.ScopeIndent.Incorrect
 }
 
 /**
@@ -92,6 +94,8 @@ function render_toggle_metabox() {
  */
 function render_price_metabox() {
 	$product = wc_get_product( get_the_ID() );
+
+// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 ?>
 
 	<p class="woosimple-render-price-field">
@@ -101,7 +105,7 @@ function render_price_metabox() {
 		<input id="woosimple_regular_price" type="text" class="woosimple-render-price" value="<?php echo esc_attr( $product->get_regular_price( 'edit' ) ); ?>">
 	</p>
 
-<?php
+<?php // phpcs:enable Generic.WhiteSpace.ScopeIndent.Incorrect
 }
 
 /**
