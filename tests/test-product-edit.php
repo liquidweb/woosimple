@@ -7,9 +7,11 @@
 
 namespace WooSimple\ProductEdit;
 
+use SteveGrunwell\PHPUnit_Markup_Assertions\MarkupAssertionsTrait;
 use WP_UnitTestCase;
 
 class ProductEditTest extends WP_UnitTestCase {
+	use MarkupAssertionsTrait;
 
 	const SCRIPT_HANDLE = 'woosimple-product-edit';
 	const STYLE_HANDLE = 'woosimple-admin';
@@ -68,6 +70,31 @@ class ProductEditTest extends WP_UnitTestCase {
 		$this->assertNotEmpty(
 			$wp_meta_boxes['product']['side']['core']['woosimple-price'],
 			'The price meta box should be available on the new product screen.'
+		);
+	}
+
+	/**
+	 * @ticket https://github.com/liquidweb/woosimple/issues/5
+	 */
+	public function test_uses_stored_user_meta_value() {
+		$user_id = $this->factory->user->create( [
+			'role' => 'contributor',
+		] );
+		wp_set_current_user( $user_id );
+		add_user_meta( $user_id, 'woosimple_product', 1 );
+
+		ob_start();
+		render_toggle_metabox();
+		$output = ob_get_clean();
+
+		$this->assertHasElementWithAttributes(
+			[
+				'id'      => 'woosimple-toggle-switch',
+				'name'    => 'woosimple-toggle-switch',
+				'checked' => 'checked',
+			],
+			$output,
+			'Expected the #woosimple-toggle-switch checkbox to be checked.'
 		);
 	}
 
