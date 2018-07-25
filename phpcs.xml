@@ -6,21 +6,23 @@
 <ruleset name="WP-Enforcer">
 	<description>Coding standards from WP Enforcer.</description>
 
-	<!-- FILES -->
-	<exclude-pattern>Gruntfile.js</exclude-pattern>
-	<exclude-pattern>phpcs.xml</exclude-pattern>
-	<exclude-pattern>*/node_modules/*</exclude-pattern>
-	<exclude-pattern>*/tests/*</exclude-pattern>
-	<exclude-pattern>*/vendor/*</exclude-pattern>
-	<exclude-pattern>*/assets/**</exclude-pattern>
+	<!-- Check all PHP files in directory tree by default. -->
+	<arg name="extensions" value="php"/>
+	<file>.</file>
 
-	<!--
-		Don't get angry about checking files that don't contain code
-		@link https://github.com/stevegrunwell/wp-enforcer/issues/12
-	-->
-	<rule ref="Internal.NoCodeFound">
-		<severity>0</severity>
-	</rule>
+	<!-- Show progress and sniff codes in all reports -->
+	<arg value="ps"/>
+
+	<!-- Exclusions -->
+	<exclude-pattern>./dist</exclude-pattern>
+	<exclude-pattern>./node_modules/*</exclude-pattern>
+	<exclude-pattern>./tests/*</exclude-pattern>
+	<exclude-pattern>./vendor/*</exclude-pattern>
+	<exclude-pattern>./assets/*</exclude-pattern>
+
+	<!-- The plugin is designed for PHP 5.4+ -->
+	<rule ref="PHPCompatibility"/>
+	<config name="testVersion" value="5.4-" />
 
 	<rule ref="WordPress-Extra" />
 	<rule ref="WordPress-Docs" />

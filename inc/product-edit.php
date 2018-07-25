@@ -14,22 +14,7 @@ namespace WooSimple\ProductEdit;
  * @param string $hook The name of the current admin page.
  */
 function enqueue_scripts( $hook ) {
-
-	// Bail if not on admin or our function doesnt exist.
-	if ( ! is_admin() || ! function_exists( 'get_current_screen' ) ) {
-		return;
-	}
-
-	// Get my current screen.
-	$screen = get_current_screen();
-
-	// Bail without.
-	if ( empty( $screen ) || ! is_object( $screen ) ) {
-		return;
-	}
-
-	// Make sure we are on the single product editor.
-	if ( 'post' !== $screen->base || 'product' !== $screen->post_type ) {
+	if ( ! in_array( $hook, [ 'post.php', 'post-new.php' ], true ) ) {
 		return;
 	}
 
@@ -37,11 +22,22 @@ function enqueue_scripts( $hook ) {
 	$min = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 	$ver = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? time() : WOOSIMPLE_VERSION;
 
-	// Load our CSS, which is always minified.
-	wp_enqueue_style( 'woosimple-admin', WOOSIMPLE_URL . '/assets/css/admin.css', null, $ver, 'all' );
+	// Enqueue the necessary assets.
+	wp_enqueue_style(
+		'woosimple-admin',
+		WOOSIMPLE_URL . '/assets/css/admin.css',
+		null,
+		$ver,
+		'all'
+	);
 
-	// Load our JS file, which is minified on production with the localized Ajax URL.
-	wp_enqueue_script( 'woosimple-product-edit', WOOSIMPLE_URL . "/assets/js/product-edit{$min}.js", [ 'postbox' ], $ver, true );
+	wp_enqueue_script(
+		'woosimple-product-edit',
+		WOOSIMPLE_URL . "/assets/js/product-edit{$min}.js",
+		[ 'postbox' ],
+		$ver,
+		true
+	);
 }
 add_action( 'admin_enqueue_scripts', __NAMESPACE__ . '\enqueue_scripts' );
 
@@ -79,16 +75,18 @@ function render_toggle_metabox() {
 
 	// Output our nonce field.
 	wp_nonce_field( 'woosimple-toggle-nonce', 'woosimple-toggle-nonce' );
+
+// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 ?>
 
 	<p>
 		<label>
-			<input name="woosimple-toggle-switch" value="on" id="woosimple-toggle-switch" class="woosimple-toggle-switch" type="checkbox" <?php checked( 'on', $active ); ?>>
+			<input name="woosimple-toggle-switch" id="woosimple-toggle-switch" class="woosimple-toggle-switch" type="checkbox" <?php checked( true, $active ); ?>>
 			<?php esc_html_e( 'Simplify this Page', 'woosimple' ); ?>
 		</label>
 	</p>
 
-<?php
+<?php // phpcs:enable Generic.WhiteSpace.ScopeIndent.Incorrect
 }
 
 /**
@@ -96,6 +94,8 @@ function render_toggle_metabox() {
  */
 function render_price_metabox() {
 	$product = wc_get_product( get_the_ID() );
+
+// phpcs:disable Generic.WhiteSpace.ScopeIndent.IncorrectExact
 ?>
 
 	<p class="woosimple-render-price-field">
@@ -105,20 +105,24 @@ function render_price_metabox() {
 		<input id="woosimple_regular_price" type="text" class="woosimple-render-price" value="<?php echo esc_attr( $product->get_regular_price( 'edit' ) ); ?>">
 	</p>
 
-<?php
+<?php // phpcs:enable Generic.WhiteSpace.ScopeIndent.Incorrect
 }
 
 /**
  * Handle saving meta boxes.
  */
 function handle_post_save() {
-
-	// Run our nonce check.
-	if ( ! isset( $_POST['woosimple-toggle-nonce'] ) || ! wp_verify_nonce( $_POST['woosimple-toggle-nonce'], 'woosimple-toggle-nonce' ) ) { // WPCS: sanitization ok.
+	if ( ! isset( $_POST['woosimple-toggle-nonce'] )
+		|| ! wp_verify_nonce( $_POST['woosimple-toggle-nonce'], 'woosimple-toggle-nonce' )
+	) { // WPCS: sanitization ok.
 		return;
 	}
 
 	// Store whether or not the user was in "Easy Mode".
-	update_user_meta( wp_get_current_user()->ID, 'woosimple_product', empty( $_POST['woosimple-toggle-switch'] ) ? 0 : 1 );
+	update_user_meta(
+		wp_get_current_user()->ID,
+		'woosimple_product',
+		empty( $_POST['woosimple-toggle-switch'] ) ? 0 : 1
+	);
 }
 add_action( 'save_post_product', __NAMESPACE__ . '\handle_post_save' );

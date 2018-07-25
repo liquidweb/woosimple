@@ -7,9 +7,11 @@
 
 namespace WooSimple\ProductEdit;
 
+use SteveGrunwell\PHPUnit_Markup_Assertions\MarkupAssertionsTrait;
 use WP_UnitTestCase;
 
 class ProductEditTest extends WP_UnitTestCase {
+	use MarkupAssertionsTrait;
 
 	const SCRIPT_HANDLE = 'woosimple-product-edit';
 	const STYLE_HANDLE = 'woosimple-admin';
@@ -71,6 +73,31 @@ class ProductEditTest extends WP_UnitTestCase {
 		);
 	}
 
+	/**
+	 * @ticket https://github.com/liquidweb/woosimple/issues/5
+	 */
+	public function test_uses_stored_user_meta_value() {
+		$user_id = $this->factory->user->create( [
+			'role' => 'contributor',
+		] );
+		wp_set_current_user( $user_id );
+		add_user_meta( $user_id, 'woosimple_product', 1 );
+
+		ob_start();
+		render_toggle_metabox();
+		$output = ob_get_clean();
+
+		$this->assertHasElementWithAttributes(
+			[
+				'id'      => 'woosimple-toggle-switch',
+				'name'    => 'woosimple-toggle-switch',
+				'checked' => 'checked',
+			],
+			$output,
+			'Expected the #woosimple-toggle-switch checkbox to be checked.'
+		);
+	}
+
 	public function test_saves_toggled_value() {
 		$user_id = $this->factory->user->create( [
 			'role' => 'contributor',
@@ -79,7 +106,7 @@ class ProductEditTest extends WP_UnitTestCase {
 
 		$_POST = [
 			'woosimple-toggle-switch' => 1,
-			'woosimple-toggle' => wp_create_nonce( 'woosimple-toggle' ),
+			'woosimple-toggle-nonce'  => wp_create_nonce( 'woosimple-toggle-nonce' ),
 		];
 
 		handle_post_save();
@@ -98,7 +125,7 @@ class ProductEditTest extends WP_UnitTestCase {
 		add_user_meta( $user_id, 'woosimple_product', 1 );
 
 		$_POST = [
-			'woosimple-toggle' => wp_create_nonce( 'woosimple-toggle' ),
+			'woosimple-toggle-nonce' => wp_create_nonce( 'woosimple-toggle-nonce' ),
 		];
 
 		handle_post_save();
@@ -117,7 +144,7 @@ class ProductEditTest extends WP_UnitTestCase {
 
 		$_POST = [
 			'woosimple-toggle-switch' => 1,
-			'woosimple-toggle' => wp_create_nonce( 'INVALID-woosimple-toggle' ),
+			'woosimple-toggle-nonce'  => wp_create_nonce( 'INVALID-woosimple-toggle' ),
 		];
 
 		handle_post_save();
