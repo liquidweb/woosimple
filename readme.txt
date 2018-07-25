@@ -4,7 +4,7 @@ Tags: woocommerce, editing
 Requires at least: 3.0.1
 Tested up to: 4.9.7
 Requires PHP: 5.4
-Stable tag: 0.1.0
+Stable tag: 1.0.0
 License: MIT
 License URI: https://opensource.org/licenses/MIT
 
@@ -19,6 +19,10 @@ Overwhelmed by all of the options on the product screen when you're just trying 
 == Changelog ==
 
 Note: [A full changelog is available on GitHub](https://github.com/liquidweb/woosimple/blob/develop/CHANGELOG.md)
+
+= 1.0.0 =
+* Fixed bug where user preferences were not being saved.
+* Ensure scripts are properly being loaded on the product edit screen.
 
 = 0.1.0 =
 * Initial public release
