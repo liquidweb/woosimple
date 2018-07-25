@@ -5,9 +5,10 @@ All notable changes to this project will be documented in this file, according t
 This project adheres to [Semantic Versioning](http://semver.org/).
 
 
-## [Unreleased]
+## [0.1.0]
 
 * Initial public release.
 
 
 [Unreleased]: https://github.com/liquidweb/woosimple/compare/master...develop
+[0.1.0]: https://github.com/liquidweb/woosimple/releases/tag/v0.1.0
